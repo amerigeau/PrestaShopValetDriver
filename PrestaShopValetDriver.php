@@ -27,64 +27,56 @@ class PrestaShopValetDriver extends ValetDriver
      */
     public function isStaticFile($sitePath, $siteName, $uri)
     {
-        //echo $uri.'<br>';
-        //echo $sitePath.'<br>';
         // Basic static file
         if (is_file($staticFilePath = "{$sitePath}/{$uri}")) {
             return $staticFilePath;
         }
         
-        // rewrite ^/c/([0-9]+)(-[.*_a-zA-Z0-9-]*)(-[0-9]+)?/.+.jpg$ /img/c/$1$2$3.jpg last;
-        if (preg_match('#/c/([0-9]+)(-[.*_a-zA-Z0-9-]*)(-[0-9]+)\/.+\.jpg//i#', $uri, $matches)) {
-            if (is_file($staticFilePath = "{$sitePath}/img/c/{$matches[1]}{$matches[2]}{$matches[3]}.jpg")) {
-                return $staticFilePath;
-            }
-        }
-
-        // rewrite ^/c/([a-zA-Z_-]+)(-[0-9]+)?/.+.jpg$ /img/c/$1$2.jpg last;
-        if (preg_match('#/c/([0-9]+)(-[.*_a-zA-Z0-9-]*)(-[0-9]+)?/i#', $uri, $matches)) {
-            if (is_file($staticFilePath = "{$sitePath}/img/c/{$matches[1]}{$matches[2]}.jpg")) {
+        // rewrite categories images
+        if (preg_match('/c\/([0-9]*)-category_default\/.*\.jpg/', $uri, $matches)) {
+            $staticFilePath = "{$sitePath}/img/c/{$matches[1]}.jpg";
+            if (is_file($staticFilePath)) {
                 return $staticFilePath;
             }
         }
 
         // rewrite ^/([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+.jpg$ /img/p/$1/$2/$3/$4/$5/$6/$7/$8/$1$2$3$4$5$6$7$8$9$10.jpg last;
-        if (preg_match('#/([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i#', $uri, $matches)) {
+        if (preg_match('/([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i', $uri, $matches)) {
             if (is_file($staticFilePath = "{$sitePath}/img/p/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[4]}/{$matches[5]}/{$matches[6]}/{$matches[7]}/{$matches[8]}/{$matches[1]}{$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}{$matches[6]}{$matches[7]}{$matches[8]}{$matches[9]}{$matches[10]}.jpg")) {
                 return $staticFilePath;
             }
         }
 
         // rewrite ^/([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+.jpg$ /img/p/$1/$2/$3/$4/$5/$6/$7/$1$2$3$4$5$6$7$8$9.jpg last;
-        if (preg_match('#/([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i#', $uri, $matches)) {
+        if (preg_match('/([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i', $uri, $matches)) {
             if (is_file($staticFilePath = "{$sitePath}/img/p/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[4]}/{$matches[5]}/{$matches[6]}/{$matches[7]}/{$matches[1]}{$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}{$matches[6]}{$matches[7]}{$matches[8]}{$matches[9]}.jpg")) {
                 return $staticFilePath;
             }
         }
 
         // rewrite ^/([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+.jpg$ /img/p/$1/$2/$3/$4/$5/$6/$1$2$3$4$5$6$7$8.jpg last;
-        if (preg_match('#/([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i#', $uri, $matches)) {
+        if (preg_match('/([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i', $uri, $matches)) {
             if (is_file($staticFilePath = "{$sitePath}/img/p/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[4]}/{$matches[5]}/{$matches[6]}/{$matches[1]}{$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}{$matches[6]}{$matches[7]}{$matches[8]}.jpg")) {
                 return $staticFilePath;
             }
         }
 
         // rewrite ^/([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+.jpg$ /img/p/$1/$2/$3/$4/$5/$1$2$3$4$5$6$7.jpg last;
-        if (preg_match('#/([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i#', $uri, $matches)) {
+        if (preg_match('/([0-9])([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i', $uri, $matches)) {
             if (is_file($staticFilePath = "{$sitePath}/img/p/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[4]}/{$matches[5]}/{$matches[1]}{$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}{$matches[6]}{$matches[7]}.jpg")) {
                 return $staticFilePath;
             }
         }
 
         // rewrite ^/([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+.jpg$ /img/p/$1/$2/$3/$4/$1$2$3$4$5$6.jpg last;
-        if (preg_match('#/([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i#', $uri, $matches)) {
+        if (preg_match('/([0-9])([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i', $uri, $matches)) {
             if (is_file($staticFilePath = "{$sitePath}/img/p/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[4]}/{$matches[1]}{$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}{$matches[6]}.jpg")) {
                 return $staticFilePath;
             }
         }
 
         // rewrite ^/([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+.jpg$ /img/p/$1/$2/$3/$1$2$3$4$5.jpg last;
-        if (preg_match('#/([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i#', $uri, $matches)) {
+        if (preg_match('/([0-9])([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i', $uri, $matches)) {
             if (is_file($staticFilePath = "{$sitePath}/img/p/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[1]}{$matches[2]}{$matches[3]}{$matches[4]}{$matches[5]}.jpg")) {
                 return $staticFilePath;
             }
@@ -92,14 +84,14 @@ class PrestaShopValetDriver extends ValetDriver
 
         
         // rewrite ^/([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+.jpg$ /img/p/$1/$2/$1$2$3$4.jpg last;
-        if (preg_match('#/([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i#', $uri, $matches)) {
+        if (preg_match('/([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i', $uri, $matches)) {
             if (is_file($staticFilePath = "{$sitePath}/img/p/{$matches[1]}/{$matches[2]}/{$matches[1]}{$matches[2]}{$matches[3]}.jpg")) {
                 return $staticFilePath;
             }
         }
 
         // rewrite ^/([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+.jpg$ /img/p/$1/$1$2$3.jpg last;
-        if (preg_match('#/([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i#', $uri, $matches)) {
+        if (preg_match('/([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.jpg/i', $uri, $matches)) {
             if (is_file($staticFilePath = "{$sitePath}/img/p/{$matches[1]}/{$matches[1]}{$matches[2]}{$matches[3]}.jpg")) {
                 return $staticFilePath;
             }
